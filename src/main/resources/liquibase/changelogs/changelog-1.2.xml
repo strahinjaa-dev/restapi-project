@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
+      http://www.liquibase.org/xml/ns/pro
+      http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+
+
+
+    <!-- delete fk Courses fk -->
+    <changeSet author="author" id="v1.2.0">
+        <dropForeignKeyConstraint baseTableName="courses"
+                                  constraintName="fk_department_course"/>
+    </changeSet>
+
+    <!-- delete fk instr fk -->
+    <changeSet author="author" id="v1.2.1">
+        <dropForeignKeyConstraint baseTableName="instructors"
+                                  constraintName="fk_instructor_department"/>
+    </changeSet>
+
+
+
+    <!-- enrollments
+    -->
+    <changeSet author="author" id="v1.2.2">
+        <createTable tableName="enrollments">
+            <column name="course_id_fk_pk" type="INT"/>
+            <column name="student_id_fk_pk" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="author" id="v1.2.3">
+        <addForeignKeyConstraint baseTableName="enrollments"
+                                 baseColumnNames="course_id_fk_pk"
+                                 referencedTableName="courses"
+                                 referencedColumnNames="course_id"
+                                 constraintName="FK_Course_Enrollments"/>
+    </changeSet>
+
+    <changeSet author="author" id="v1.2.4">
+        <addForeignKeyConstraint baseTableName="enrollments"
+                                 baseColumnNames="student_id_fk_pk"
+                                 referencedTableName="students"
+                                 referencedColumnNames="student_id"
+                                 constraintName="FK_Students_Enrollments"/>
+    </changeSet>
+    <changeSet author="author" id="v1.2.5">
+        <addPrimaryKey columnNames="student_id_fk_pk, course_id_fk_pk"
+                       constraintName="PKeys-enrollments"
+                       tableName="enrollments"
+                      />
+    </changeSet>
+
+    <!-- courseinstructors
+   -->
+
+    <changeSet author="author" id="v1.2.6">
+        <createTable tableName="courseInstructors">
+            <column name="course_id_fk_pk" type="INT"/>
+            <column name="instructor_id_fk_pk" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="author" id="v1.2.7">
+        <addForeignKeyConstraint baseTableName="courseInstructors"
+                                 baseColumnNames="course_id_fk_pk"
+                                 referencedTableName="courses"
+                                 referencedColumnNames="course_id"
+                                 constraintName="FK_Course_courseInstructors"/>
+    </changeSet>
+
+    <changeSet author="author" id="v1.2.8">
+        <addForeignKeyConstraint baseTableName="courseInstructors"
+                                 baseColumnNames="instructor_id_fk_pk"
+                                 referencedTableName="instructors"
+                                 referencedColumnNames="employee_id"
+                                 constraintName="FK_Instructors_courseInstructors"/>
+    </changeSet>
+    <changeSet author="author" id="v1.2.9">
+        <addPrimaryKey columnNames="instructor_id_fk_pk, course_id_fk_pk"
+                       constraintName="PKeys-courseInstructors"
+                       tableName="courseInstructors"
+        />
+    </changeSet>
+<!-- brisanje kolona-->
+    <changeSet author="author" id="v1.2.10">
+        <dropColumn catalogName="restapi"
+                    columnName="department_id_fk"
+                    schemaName="public"
+                    tableName="courses">
+            <column name="department_id_fk"/>
+        </dropColumn>
+        <dropColumn catalogName="restapi"
+                    columnName="department_id_fk"
+                    schemaName="public"
+                    tableName="instructors">
+            <column name="department_id_fk"/>
+        </dropColumn>
+    </changeSet>
+
+</databaseChangeLog>

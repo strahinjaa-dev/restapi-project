@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+
+
+
+
+
+    <changeSet id="v1.0.0" author="author">
+        <createTable tableName="instructors">
+            <column name="employee_id" type="INT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(50)"/>
+            <column name="last_name" type="VARCHAR(50)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="author" id="v1.0.1">
+        <addAutoIncrement catalogName="restapi"
+                          columnDataType="int"
+                          columnName="employee_id"
+                          defaultOnNull="false"
+                          generationType="ALWAYS"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="0"
+                          tableName="instructors"/>
+    </changeSet>
+    <changeSet id="v1.0.2" author="author">
+        <createTable tableName="students">
+            <column name="student_id" type="INT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(50)"/>
+            <column name="last_name" type="VARCHAR(50)"/>
+            <column name="instructor_id_fk" type="INT">
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="author" id="v1.0.3">
+        <addAutoIncrement catalogName="restapi"
+                          columnDataType="int"
+                          columnName="student_id"
+                          defaultOnNull="false"
+                          generationType="ALWAYS"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="0"
+                          tableName="students"/>
+    </changeSet>
+    <changeSet  author="author"  id="v1.0.4">
+        <addForeignKeyConstraint  baseColumnNames="instructor_id_fk"
+                                  baseTableCatalogName="restapi"
+                                  baseTableName="students"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_instructor_student"
+                                  deferrable="true"
+                                  initiallyDeferred="true"
+                                  onDelete="CASCADE"
+                                  onUpdate="RESTRICT"
+                                  referencedColumnNames="employee_id"
+                                  referencedTableCatalogName="restapi"
+                                  referencedTableName="instructors"
+                                  referencedTableSchemaName="public"
+        />
+    </changeSet>
+</databaseChangeLog>

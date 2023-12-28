@@ -1,0 +1,92 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
+      http://www.liquibase.org/xml/ns/pro
+      http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
+
+
+
+
+    <changeSet id="v1.1.0" author="author">
+        <createTable tableName="departments">
+            <column name="department_id" type="INT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="department_name" type="VARCHAR(50)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="author" id="v1.1.1">
+        <addAutoIncrement catalogName="restapi"
+                          columnDataType="int"
+                          columnName="department_id"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="0"
+                          tableName="departments"/>
+    </changeSet>
+
+    <changeSet id="v1.1.2" author="author">
+        <createTable tableName="courses">
+            <column name="course_id" type="INT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="course_name" type="VARCHAR(50)"/>
+            <column name="department_id_fk" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="author" id="v1.1.3">
+        <addAutoIncrement catalogName="restapi"
+                          columnDataType="int"
+                          columnName="course_id"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="0"
+                          tableName="courses"/>
+    </changeSet>
+
+    <changeSet  author="author"  id="v1.1.4">
+        <addForeignKeyConstraint  baseColumnNames="department_id_fk"
+                                  baseTableCatalogName="restapi"
+                                  baseTableName="courses"
+                                  baseTableSchemaName="public"
+                                  constraintName="fk_department_course"
+                                  deferrable="true"
+                                  initiallyDeferred="true"
+                                  onDelete="CASCADE"
+                                  onUpdate="CASCADE"
+                                  referencedColumnNames="department_id"
+                                  referencedTableCatalogName="restapi"
+                                  referencedTableName="departments"
+                                  referencedTableSchemaName="public"
+        />
+    </changeSet>
+
+
+
+    <!-- Dodavanje nove kolone 'department_id' u tabelu 'instructors' -->
+    <changeSet author="author" id="v1.1.5">
+        <addColumn tableName="instructors">
+            <column name="department_id_fk" type="INT"/>
+        </addColumn>
+    </changeSet>
+
+    <!-- Dodavanje foreign key ograničenja -->
+    <changeSet author="author" id="v1.1.6">
+        <addForeignKeyConstraint
+                baseTableName="instructors"
+                baseColumnNames="department_id_fk"
+                constraintName="fk_instructor_department"
+                referencedTableName="departments"
+                referencedColumnNames="department_id"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+
+</databaseChangeLog>
