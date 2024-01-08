@@ -1,5 +1,6 @@
-package org.example.contollers;
+package org.example.controllers;
 
+import io.swagger.annotations.Api;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.example.models.Instructor;
@@ -7,12 +8,13 @@ import org.example.service.InstructorService;
 
 import java.sql.SQLException;
 import java.util.List;
-@Path("/message")
+@Path("/instructors")
+@Api(value = "/instructors", description = "REST Endpoints for User Service")
 public class InstructorController {
 
     InstructorService instructorService= new InstructorService();
     @GET
-    @Path("/instructors")
+    @Path("/getAllInstructors")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Instructor> getMessageInstructors() throws SQLException {
         try {
@@ -23,7 +25,7 @@ public class InstructorController {
         }
         return instructorService.getInstructors();
     }
-
+/*
     @POST
     @Path("/instructors")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -54,4 +56,6 @@ public class InstructorController {
             throw new RuntimeException(e);
         }
     }
+    */
+
 }

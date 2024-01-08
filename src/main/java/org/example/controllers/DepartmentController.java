@@ -1,4 +1,4 @@
-package org.example.contollers;
+package org.example.controllers;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
