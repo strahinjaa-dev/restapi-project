@@ -1,5 +1,8 @@
 package org.example.models;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement(name = "Instructor")
 public class Instructor {
 
     private Integer employee_id;
@@ -13,15 +16,15 @@ public class Instructor {
         this.last_name = last_name;
         this.department_id = department_id;
     }
-
+    @XmlElement(name = "employee_id")
     public Integer getEmployee_id() {
         return employee_id;
     }
-
+    @XmlElement(name = "first_name")
     public String getFirst_name() {
         return first_name;
     }
-
+    @XmlElement(name = "last_name")
     public String getLast_name() {
         return last_name;
     }

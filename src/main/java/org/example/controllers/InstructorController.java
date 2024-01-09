@@ -1,29 +1,35 @@
 package org.example.controllers;
 
 import io.swagger.annotations.Api;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
+import io.swagger.annotations.ApiOperation;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 import org.example.models.Instructor;
 import org.example.service.InstructorService;
 
+import javax.ws.rs.core.Response;
 import java.sql.SQLException;
-import java.util.List;
 @Path("/instructors")
 @Api(value = "/instructors", description = "REST Endpoints for User Service")
+@Produces({"application/json", "application/xml"})
 public class InstructorController {
 
     InstructorService instructorService= new InstructorService();
     @GET
     @Path("/getAllInstructors")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Instructor> getMessageInstructors() throws SQLException {
+    @ApiOperation(value = "Finds Pets by status",
+            notes = "Multiple status values can be provided with comma seperated strings",
+            response = Instructor.class,
+            responseContainer = "List")
+    public Response getMessageInstructors() throws SQLException {
         try {
-            return instructorService.getInstructors();
+            return Response.ok(instructorService.getInstructors()).build();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-        return instructorService.getInstructors();
+        return Response.ok(instructorService.getInstructors()).build();
     }
 /*
     @POST

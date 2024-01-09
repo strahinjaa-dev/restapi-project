@@ -1,4 +1,4 @@
-package org.example.util;
+package org.example;
 
 
 import io.swagger.jaxrs.config.BeanConfig;
