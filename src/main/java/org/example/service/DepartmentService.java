@@ -12,9 +12,9 @@ public class DepartmentService {
 
     DepartmentRepository departmentRepository= new DepartmentRepository();
 
-    public void deleteDepartment(Department department, int id) throws SQLException {
+    public void deleteDepartment(Department department) throws SQLException {
 
-        departmentRepository.deleteDepartment(department,id);
+        departmentRepository.deleteDepartment(department);
     }
 
     public Department updateDepartment(Department department) {

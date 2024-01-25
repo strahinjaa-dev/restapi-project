@@ -13,7 +13,7 @@ public class Instructor {
         this.last_name = last_name;
         this.department_id = department_id;
     }
-
+    public Instructor(){}
     public Integer getEmployee_id() {
         return employee_id;
     }
@@ -26,7 +26,7 @@ public class Instructor {
         return last_name;
     }
 
-    public Instructor(){}
+
 
     public Integer getDepartment_id() {
         return department_id;
@@ -48,12 +48,4 @@ public class Instructor {
         this.last_name = last_name;
     }
 
-    @Override
-    public String toString() {
-        return "Instructor{" +
-                "employee_id=" + employee_id +
-                ", first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                '}';
-    }
 }

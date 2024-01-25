@@ -10,8 +10,8 @@ import java.util.List;
 public class InstructorRepository {
 
     Connection connection = DatabaseConnection.getConnection();
-    public void deleteInstructor(Instructor instructor, int id) throws SQLException {
-
+    public void deleteInstructor(Instructor instructor) throws SQLException {
+        int id = instructor.getEmployee_id();
         try {
             Statement statement = connection.createStatement();
 
@@ -68,7 +68,7 @@ public class InstructorRepository {
                 preparedStatement.setString(1, name);
                 preparedStatement.setString(2, last_name);
                 //preparedStatement.setString(3, last_name);
-
+                System.out.println(name+" " + last_name);
                 int affectedRows = preparedStatement.executeUpdate();
 
                 if (affectedRows > 0) {

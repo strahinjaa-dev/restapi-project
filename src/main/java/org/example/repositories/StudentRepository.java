@@ -72,7 +72,8 @@ public class StudentRepository {
         }
         return students;
     }
-    public void deleteStudentByID(Student student, int id) throws SQLException {
+    public void deleteStudentByID(Student student) throws SQLException {
+        int id = student.getStudent_id();
         try {
             Statement statement = connection.createStatement();
             String sqlQuery = "DELETE FROM students WHERE student_id = " + id;

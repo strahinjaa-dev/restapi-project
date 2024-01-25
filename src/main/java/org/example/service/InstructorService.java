@@ -14,9 +14,9 @@ public class InstructorService {
 
     InstructorRepository instructorRepository= new InstructorRepository();
 
-    public void deleteInstructor(Instructor instructor, int id) throws SQLException {
+    public void deleteInstructor(Instructor instructor) throws SQLException {
 
-        instructorRepository.deleteInstructor(instructor, id);
+        instructorRepository.deleteInstructor(instructor);
     }
 
     public Instructor updateInstructor(Instructor instructor) {

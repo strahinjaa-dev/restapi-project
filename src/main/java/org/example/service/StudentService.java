@@ -18,14 +18,14 @@ public class StudentService {
     Connection connection = DatabaseConnection.getConnection();
 
 
-    public void deleteStudent(Student student, int id) throws SQLException {
-        if(id>=0) {
-            studentRepository.deleteStudentByID(student, id);
+    public void deleteStudent(Student student) {
+
+        try {
+             studentRepository.deleteStudentByID(student);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        else{
-            System.out.println("Ne moze id manji od 0!");
-            }
-        }
+    }
 
     public Student updateStudent(Student student){
 

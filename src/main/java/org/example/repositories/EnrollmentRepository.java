@@ -25,7 +25,7 @@ public class EnrollmentRepository {
             while (resultSet.next()) {
                 Integer course_id = resultSet.getInt("course_id_fk_pk");
                 Integer student_id = resultSet.getInt("student_id_fk_pk");
-                Enrollment e = new Enrollment(course_id, student_id);
+                Enrollment e = new Enrollment(student_id,course_id);
 
                 enrollments.add(e);
             }
@@ -34,8 +34,10 @@ public class EnrollmentRepository {
         }
         return enrollments;
     }
-    public Enrollment addEnrollment(Integer student_id, Integer course_id){
+    public Enrollment addEnrollment(Enrollment enrollment){
 
+        int student_id_fk_pk= enrollment.getStudent_id();
+        int course_id_fk_pk=enrollment.getCourse_id();
         try  {
 
             // SQL upit za unos podataka
@@ -44,8 +46,8 @@ public class EnrollmentRepository {
             // Priprema SQL naredbe s parametrima
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
                 //preparedStatement.setInt(1, id);
-                preparedStatement.setInt(1, student_id);
-                preparedStatement.setInt(2, course_id);
+                preparedStatement.setInt(1, student_id_fk_pk);
+                preparedStatement.setInt(2, course_id_fk_pk);
 
                 // Izvršavanje upita za unos
                 int affectedRows = preparedStatement.executeUpdate();
@@ -60,15 +62,16 @@ public class EnrollmentRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Enrollment e= new Enrollment(student_id, course_id);
-        return e;
-    }
-    public void deleteEnrollment(Student student, int student_id, int course_id) throws SQLException {
 
+        return enrollment;
+    }
+    public void deleteEnrollment(Enrollment enrollment) throws SQLException {
+    int student_id_fk_pk= enrollment.getStudent_id();
+    int course_id_fk_pk=enrollment.getCourse_id();
         try {
             Statement statement = connection.createStatement();
 
-            String sqlQuery = "DELETE FROM enrollments WHERE student_id_fk_pk = " + student_id + "and course_id_fk_pk = "+course_id;
+            String sqlQuery = "DELETE FROM enrollments WHERE student_id_fk_pk = " + student_id_fk_pk + "and course_id_fk_pk = "+course_id_fk_pk;
 
             statement.executeUpdate(sqlQuery);
         } catch (Exception e) {

@@ -11,8 +11,9 @@ public class DepartmentRepository {
 
     Connection connection = DatabaseConnection.getConnection();
 
-    public void deleteDepartment(Department department, int id) throws SQLException {
+    public void deleteDepartment(Department department) throws SQLException {
 
+        int id= department.getDepartment_id();
         try {
             Statement statement = connection.createStatement();
 

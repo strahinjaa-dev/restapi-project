@@ -1,18 +1,19 @@
-package org.example.contollers;
+package org.example.controllers;
 
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
 import org.example.models.Instructor;
 import org.example.service.InstructorService;
-
+import jakarta.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.sql.SQLException;
 import java.util.List;
-@Path("/message")
+
+
+@Path("/instructors")
 public class InstructorController {
 
     InstructorService instructorService= new InstructorService();
+
     @GET
-    @Path("/instructors")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Instructor> getMessageInstructors() throws SQLException {
         try {
@@ -25,31 +26,24 @@ public class InstructorController {
     }
 
     @POST
-    @Path("/instructors")
     @Consumes(MediaType.APPLICATION_JSON)
     public Instructor addInstructor(Instructor instructor) {
         return instructorService.addInstructor(instructor);
     }
-
     @PUT
-    @Path("/instructors/{instructor_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Instructor updateInstructor(@PathParam("instructor_id") int id, Instructor instructor){
+    public Instructor updateInstructor( Instructor instructor){
 
-        instructor.setEmployee_id(id);
         return instructorService.updateInstructor(instructor);
 
     }
-
     @DELETE
-    @Path("/instructors/{instructor_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void deleteInstructor(@PathParam("instructor_id") int id, Instructor instructor){
+    public void deleteInstructor(Instructor instructor){
 
-        instructor.setEmployee_id(id);
         try {
-            instructorService.deleteInstructor(instructor, id);
+            instructorService.deleteInstructor(instructor);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

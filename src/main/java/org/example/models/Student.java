@@ -11,9 +11,14 @@ public class Student {
 
     private Integer instructor_id;
 
+    public Student(){}
 
-
-
+    public Student(Integer student_id, String first_name, String last_name, Integer instructor_id) {
+        this.student_id = student_id;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.instructor_id = instructor_id;
+    }
 
     public void setInstructor_id(Integer instructor_id) {
         this.instructor_id = instructor_id;
@@ -35,19 +40,9 @@ public class Student {
         return last_name;
     }
 
-    public Student(){}
-
-    public Student(Integer student_id, String first_name, String last_name, Integer instructor_id) {
-        this.student_id = student_id;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.instructor_id = instructor_id;
-    }
     public void setStudent_id(Integer student_id) {
         this.student_id = student_id;
     }
-
-
 
     public void setFirst_name(String first_name) {
         this.first_name = first_name;
@@ -57,13 +52,5 @@ public class Student {
         this.last_name = last_name;
     }
 
-    @Override
-    public String toString() {
-        return "Student{" +
-                "student_id=" + student_id +
-                ", first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", instructor_id=" + instructor_id +
-                '}';
-    }
+
 }

@@ -12,9 +12,9 @@ public class CourseService {
 
     CourseRepository courseRepository= new CourseRepository();
 
-    public void deleteCourse(Course course, int id) throws SQLException {
+    public void deleteCourse(Course course) throws SQLException {
 
-        courseRepository.deleteCourse(course, id);
+        courseRepository.deleteCourse(course);
     }
 
     public Course updateCourse(Course course) {

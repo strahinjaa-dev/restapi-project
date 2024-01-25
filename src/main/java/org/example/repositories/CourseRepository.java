@@ -11,8 +11,9 @@ public class CourseRepository {
 
     Connection connection = DatabaseConnection.getConnection();
 
-    public void deleteCourse(Course course, int id) throws SQLException {
+    public void deleteCourse(Course course) throws SQLException {
 
+        int id = course.getCourse_id();
         try {
             Statement statement = connection.createStatement();
 

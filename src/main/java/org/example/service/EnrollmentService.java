@@ -16,14 +16,14 @@ public class EnrollmentService {
 
         return enrollmentRepository.getEnrollments();
     }
-    public Enrollment addEnrollment(Integer student_id, Integer course_id){
+    public Enrollment addEnrollment(Enrollment enrollment){
 
-        enrollmentRepository.addEnrollment(student_id,course_id);
-        Enrollment e= new Enrollment(student_id, course_id);
-        return e;
+        enrollmentRepository.addEnrollment(enrollment);
+
+        return enrollment;
     }
-    public void deleteEnrollment(Student student, int student_id, int course_id) throws SQLException {
+    public void deleteEnrollment(Enrollment enrollment) throws SQLException {
 
-        enrollmentRepository.deleteEnrollment(student, student_id, course_id);
+        enrollmentRepository.deleteEnrollment(enrollment);
     }
 }

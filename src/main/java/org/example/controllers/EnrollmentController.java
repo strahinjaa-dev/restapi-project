@@ -1,20 +1,18 @@
-package org.example.contollers;
+package org.example.controllers;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import org.example.service.EnrollmentService;
-import org.example.models.Enrollment;
-import org.example.models.Student;
-
 import java.sql.SQLException;
 import java.util.List;
 
-@Path("/message")
+import org.example.service.EnrollmentService;
+import org.example.models.Enrollment;
+
+@Path("/enrollments")
 public class EnrollmentController {
 
     EnrollmentService enrollmentService=new EnrollmentService();
     @GET
-    @Path("/enrollments")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Enrollment> getEnrollments() {
         try {
@@ -30,24 +28,20 @@ public class EnrollmentController {
         }
     }
     @DELETE
-    @Path("/students/{student_id}/enrollments/{course_id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public void deleteInstructor(@PathParam("student_id") int student_id,
-                                 @PathParam("course_id") int course_id, Student student){
+    public void deleteEnrollment(Enrollment enrollment){
 
-        student.setStudent_id(student_id);
+
         try {
-            enrollmentService.deleteEnrollment(student, student_id,course_id);
+            enrollmentService.deleteEnrollment(enrollment);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
     //add enrollment
     @POST
-    @Path("/students/{student_id}/enrollments/{course_id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Enrollment addEnrollment(@PathParam("student_id") int student_id,
-                                    @PathParam("course_id") int course_id) {
-        return enrollmentService.addEnrollment(student_id,course_id);
+    public Enrollment addEnrollment(Enrollment enrollment) {
+        return enrollmentService.addEnrollment(enrollment);
     }
 }
