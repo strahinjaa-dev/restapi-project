@@ -1,8 +1,13 @@
 package org.example.repositories;
 
 import org.example.jdbc.DatabaseConnection;
+import org.example.models.Instructor;
 import org.example.models.Student;
+import org.hibernate.*;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistryBuilder;
 
+import javax.imageio.spi.ServiceRegistry;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,101 +18,68 @@ public class StudentRepository {
 
     public Student addStudent(Student student){
 
-        try  {
+        Student s= new Student();
 
-            // SQL upit za unos podataka
-            String insertQuery = "INSERT INTO students (first_name, last_name, instructor_id_fk) VALUES ( ?, ?, ? )";
+        Configuration con= new Configuration().configure().addAnnotatedClass(Student.class);
 
-            // Parametri koje ćete umetnuti
-            String first_name = student.getFirst_name();
-            String last_name = student.getLast_name();
-            Integer id = student.getStudent_id();
-            Integer instructor_id = student.getInstructor_id();
+        SessionFactory sf = con.buildSessionFactory();
+        Session session = sf.openSession();
 
-            // Priprema SQL naredbe s parametrima
-            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-                //preparedStatement.setInt(1, id);
-                preparedStatement.setString(1, first_name);
-                preparedStatement.setString(2, last_name);
-                preparedStatement.setInt(3, instructor_id);
+        Transaction tx = session.beginTransaction();
 
-                // Izvršavanje upita za unos
-                int affectedRows = preparedStatement.executeUpdate();
+        session.save(student);
 
-                if (affectedRows > 0) {
-                    System.out.println("Podaci uspešno uneseni u bazu.");
-                } else {
-                    System.out.println("Nije uspelo uneti podatke u bazu.");
-                }
-            }
+        tx.commit();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return student;
     }
 
     public List<Student> getAllStudents() throws SQLException{
 
-        List<Student> students = new ArrayList<>();
-        try {
+        Configuration con= new Configuration().configure().addAnnotatedClass(Student.class);
 
-            Statement statement = connection.createStatement();
-            // Execute the query
-            String query = "select * from students";
-            ResultSet resultSet = statement.executeQuery(query);
+        SessionFactory sf = con.buildSessionFactory();
 
-            // Process the result set
-            while (resultSet.next()) {
-                int studentID = resultSet.getInt("student_id");
-                String firstName = resultSet.getString("first_name");
-                String lastName = resultSet.getString("last_name");
-                int instructorID = resultSet.getInt("instructor_id_fk");
-                Student s = new Student(studentID, firstName, lastName, instructorID);
+        Session session = sf.openSession();
 
-                students.add(s);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        session.beginTransaction();
+
+        Criteria criteria= session.createCriteria(Student.class);
+        List students = criteria.list();
+        session.getTransaction().commit();
+
         return students;
     }
     public void deleteStudentByID(Student student) throws SQLException {
         int id = student.getStudent_id();
-        try {
-            Statement statement = connection.createStatement();
-            String sqlQuery = "DELETE FROM students WHERE student_id = " + id;
-            statement.executeUpdate(sqlQuery);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        Configuration con= new Configuration().configure().addAnnotatedClass(Student.class);
+
+        SessionFactory sf = con.buildSessionFactory();
+
+        Session session = sf.openSession();
+
+        session.beginTransaction();
+
+        session.delete(student);
+
+        session.getTransaction().commit();
+
     }
     public Student updateStudent(Student student){
-        try {
-            Statement statement = connection.createStatement();
 
-            Integer id = student.getStudent_id();
-            String first_name = student.getFirst_name();
-            String last_name = student.getLast_name();
-            Integer instructor_id= student.getInstructor_id();
+        Configuration con= new Configuration().configure().addAnnotatedClass(Student.class);
 
-            String sqlQuery = "UPDATE students SET first_name = ?, last_name = ?, instructor_id_fk = ? WHERE student_id = "+id;
+        SessionFactory sf = con.buildSessionFactory();
 
-            // Priprema PreparedStatement objekta
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
-                // Postavljanje vrednosti parametara
-                preparedStatement.setString(1, first_name);
-                preparedStatement.setString(2, last_name);
-                preparedStatement.setInt(3, instructor_id);
+        Session session = sf.openSession();
 
-                // Izvršite SQL upit
-                int affectedRows = preparedStatement.executeUpdate();
-                System.out.println("Broj ažuriranih redova: " + affectedRows);
-            }
+        session.beginTransaction();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        session.update(student);
+
+        session.getTransaction().commit();
+
         return student;
     }
 }

@@ -2,6 +2,12 @@ package org.example.repositories;
 
 import org.example.jdbc.DatabaseConnection;
 import org.example.models.Instructor;
+import org.example.models.Student;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,103 +17,67 @@ public class InstructorRepository {
 
     Connection connection = DatabaseConnection.getConnection();
     public void deleteInstructor(Instructor instructor) throws SQLException {
-        int id = instructor.getEmployee_id();
-        try {
-            Statement statement = connection.createStatement();
 
-            String sqlQuery = "DELETE FROM instructors WHERE employee_id = " + id;
+        Configuration con= new Configuration().configure().addAnnotatedClass(Instructor.class);
 
-            statement.executeUpdate(sqlQuery);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        SessionFactory sf = con.buildSessionFactory();
+
+        Session session = sf.openSession();
+
+        session.beginTransaction();
+
+        session.delete(instructor);
+
+        session.getTransaction().commit();
     }
 
     public Instructor updateInstructor(Instructor instructor) {
 
-        try {
-            Statement statement = connection.createStatement();
+        Configuration con= new Configuration().configure().addAnnotatedClass(Instructor.class);
 
-            Integer id = instructor.getEmployee_id();
-            String first_name = instructor.getFirst_name();
-            String last_name = instructor.getLast_name();
+        SessionFactory sf = con.buildSessionFactory();
 
-            String sqlQuery = "UPDATE instructors SET first_name = ?, last_name = ? WHERE employee_id = " + id;
+        Session session = sf.openSession();
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+        session.beginTransaction();
 
-                preparedStatement.setString(1, first_name);
-                preparedStatement.setString(2, last_name);
+        session.update(instructor);
 
-                int affectedRows = preparedStatement.executeUpdate();
-                System.out.println("Broj ažuriranih redova: " + affectedRows);
-            }
+        session.getTransaction().commit();
 
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
         return instructor;
     }
 
     public Instructor addInstructor(Instructor instructor) {
 
-        try {
+        Configuration con= new Configuration().configure().addAnnotatedClass(Instructor.class);
 
-            String insertQuery = "INSERT INTO instructors ( first_name, last_name) VALUES ( ?, ?)";
+        SessionFactory sf = con.buildSessionFactory();
+        Session session = sf.openSession();
 
-            String name = instructor.getFirst_name();
-            String last_name = instructor.getLast_name();
-            Integer id = instructor.getEmployee_id();
+        Transaction tx = session.beginTransaction();
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-                preparedStatement.setString(1, name);
-                preparedStatement.setString(2, last_name);
-                //preparedStatement.setString(3, last_name);
-                System.out.println(name+" " + last_name);
-                int affectedRows = preparedStatement.executeUpdate();
+        session.save(instructor);
 
-                if (affectedRows > 0) {
-                    System.out.println("Podaci uspesno uneseni u bazu.");
-                } else {
-                    System.out.println("Nije uspelo uneti podatke u bazu.");
-                }
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        tx.commit();
+
         return instructor;
     }
 
     public List<Instructor> getInstructors() throws SQLException {
 
-        List<Instructor> instructors = new ArrayList<>();
+        Configuration con= new Configuration().configure().addAnnotatedClass(Instructor.class);
 
-        try {
-            Statement statement = connection.createStatement();
+        SessionFactory sf = con.buildSessionFactory();
 
-            String query = "select * from instructors";
-            ResultSet resultSet = statement.executeQuery(query);
+        Session session = sf.openSession();
 
-            while (resultSet.next()) {
-                int employeeID = resultSet.getInt("employee_id");
-                String firstName = resultSet.getString("first_name");
-                String lastName = resultSet.getString("last_name");
-                Instructor i = new Instructor(employeeID, firstName, lastName,-1);
+        session.beginTransaction();
 
-                instructors.add(i);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Criteria criteria= session.createCriteria(Instructor.class);
+        List instructors = criteria.list();
+        session.getTransaction().commit();
+
         return instructors;
     }
 }

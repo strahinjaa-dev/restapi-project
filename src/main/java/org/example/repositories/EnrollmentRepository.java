@@ -1,8 +1,15 @@
 package org.example.repositories;
 
 import org.example.jdbc.DatabaseConnection;
+import org.example.models.Course;
+import org.example.models.Department;
 import org.example.models.Enrollment;
 import org.example.models.Student;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,68 +21,48 @@ public class EnrollmentRepository {
 
     public List<Enrollment> getEnrollments() throws SQLException {
 
-        List<Enrollment> enrollments = new ArrayList<>();
 
-        try {
-            Statement statement = connection.createStatement();
+        Configuration con= new Configuration().configure().addAnnotatedClass(Enrollment.class);
 
-            String query = "select * from enrollments";
-            ResultSet resultSet = statement.executeQuery(query);
+        SessionFactory sf = con.buildSessionFactory();
 
-            while (resultSet.next()) {
-                Integer course_id = resultSet.getInt("course_id_fk_pk");
-                Integer student_id = resultSet.getInt("student_id_fk_pk");
-                Enrollment e = new Enrollment(student_id,course_id);
+        Session session = sf.openSession();
 
-                enrollments.add(e);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        session.beginTransaction();
+
+        Criteria criteria= session.createCriteria(Enrollment.class);
+        List enrollments = criteria.list();
+        session.getTransaction().commit();
+
         return enrollments;
     }
     public Enrollment addEnrollment(Enrollment enrollment){
 
-        int student_id_fk_pk= enrollment.getStudent_id();
-        int course_id_fk_pk=enrollment.getCourse_id();
-        try  {
+        Configuration con= new Configuration().configure().addAnnotatedClass(Enrollment.class);
 
-            // SQL upit za unos podataka
-            String insertQuery = "INSERT INTO enrollments (student_id_fk_pk, course_id_fk_pk) VALUES ( ?, ? )";
+        SessionFactory sf = con.buildSessionFactory();
+        Session session = sf.openSession();
 
-            // Priprema SQL naredbe s parametrima
-            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-                //preparedStatement.setInt(1, id);
-                preparedStatement.setInt(1, student_id_fk_pk);
-                preparedStatement.setInt(2, course_id_fk_pk);
+        Transaction tx = session.beginTransaction();
 
-                // Izvršavanje upita za unos
-                int affectedRows = preparedStatement.executeUpdate();
+        session.save(enrollment);
 
-                if (affectedRows > 0) {
-                    System.out.println("Podaci uspešno uneseni u bazu.");
-                } else {
-                    System.out.println("Nije uspelo uneti podatke u bazu.");
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        tx.commit();
 
         return enrollment;
     }
     public void deleteEnrollment(Enrollment enrollment) throws SQLException {
-    int student_id_fk_pk= enrollment.getStudent_id();
-    int course_id_fk_pk=enrollment.getCourse_id();
-        try {
-            Statement statement = connection.createStatement();
 
-            String sqlQuery = "DELETE FROM enrollments WHERE student_id_fk_pk = " + student_id_fk_pk + "and course_id_fk_pk = "+course_id_fk_pk;
+        Configuration con= new Configuration().configure().addAnnotatedClass(Enrollment.class);
 
-            statement.executeUpdate(sqlQuery);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        SessionFactory sf = con.buildSessionFactory();
+
+        Session session = sf.openSession();
+
+        session.beginTransaction();
+
+        session.delete(enrollment);
+
+        session.getTransaction().commit();
     }
 }

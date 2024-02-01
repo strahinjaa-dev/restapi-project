@@ -1,17 +1,23 @@
 package org.example.models;
 
+import javax.persistence.*;
+
+@Entity
 public class Instructor {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer employee_id;
     private String first_name;
     private String last_name;
-    private Integer department_id;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Department department;
 
-    public Instructor(Integer employee_id, String first_name, String last_name, Integer department_id) {
+    public Instructor(Integer employee_id, String first_name, String last_name, Department department) {
         this.employee_id = employee_id;
         this.first_name = first_name;
         this.last_name = last_name;
-        this.department_id = department_id;
+        this.department = department;
     }
     public Instructor(){}
     public Integer getEmployee_id() {
@@ -26,14 +32,12 @@ public class Instructor {
         return last_name;
     }
 
-
-
-    public Integer getDepartment_id() {
-        return department_id;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
-    public void setDepartment_id(Integer department_id) {
-        this.department_id = department_id;
+    public Department getDepartment() {
+        return department;
     }
 
     public void setEmployee_id(Integer employee_id) {

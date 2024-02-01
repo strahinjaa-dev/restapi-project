@@ -2,6 +2,13 @@ package org.example.repositories;
 
 import org.example.jdbc.DatabaseConnection;
 import org.example.models.Course;
+import org.example.models.Department;
+import org.example.models.Instructor;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,106 +20,66 @@ public class CourseRepository {
 
     public void deleteCourse(Course course) throws SQLException {
 
-        int id = course.getCourse_id();
-        try {
-            Statement statement = connection.createStatement();
+        Configuration con= new Configuration().configure().addAnnotatedClass(Course.class);
 
-            String sqlQuery = "DELETE FROM courses WHERE course_id = " + id;
+        SessionFactory sf = con.buildSessionFactory();
 
-            statement.executeUpdate(sqlQuery);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Session session = sf.openSession();
+
+        session.beginTransaction();
+
+        session.delete(course);
+
+        session.getTransaction().commit();
     }
 
     public Course updateCourse(Course course) {
 
-        try {
-            Statement statement = connection.createStatement();
+        Configuration con= new Configuration().configure().addAnnotatedClass(Course.class);
 
-            Integer id = course.getCourse_id();
-            String name = course.getCourse_name();
-            Integer department_id_fk = course.getDepartment_id_fk();
+        SessionFactory sf = con.buildSessionFactory();
 
+        Session session = sf.openSession();
 
-            String sqlQuery = "UPDATE courses SET course_name = ?, department_id_fk = ? WHERE course_id = " + id;
+        session.beginTransaction();
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+        session.update(course);
 
-                preparedStatement.setString(1, name);
-                preparedStatement.setInt(2, department_id_fk);
+        session.getTransaction().commit();
 
-
-                int affectedRows = preparedStatement.executeUpdate();
-                System.out.println("Broj ažuriranih redova: " + affectedRows);
-            }
-
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
         return course;
     }
 
     public Course addCourse(Course course) {
 
-        try {
-            //department_id_fk
-            String insertQuery = "INSERT INTO courses ( course_name) VALUES ( ? )";
+        Configuration con= new Configuration().configure().addAnnotatedClass(Course.class);
 
-            String name = course.getCourse_name();
-            Integer department_id_fk = course.getDepartment_id_fk();
+        SessionFactory sf = con.buildSessionFactory();
+        Session session = sf.openSession();
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-                preparedStatement.setString(1, name);
-                // preparedStatement.setInt(2, department_id_fk);
+        Transaction tx = session.beginTransaction();
 
+        session.save(course);
 
-                int affectedRows = preparedStatement.executeUpdate();
+        tx.commit();
 
-                if (affectedRows > 0) {
-                    System.out.println("Podaci uspesno uneseni u bazu.");
-                } else {
-                    System.out.println("Nije uspelo uneti podatke u bazu.");
-                }
-            }
-
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
         return course;
     }
 
     public List<Course> getCourses() throws SQLException {
 
-        List<Course> courses = new ArrayList<>();
 
-        try {
-            Statement statement = connection.createStatement();
+        Configuration con= new Configuration().configure().addAnnotatedClass(Course.class);
 
-            String query = "select * from courses";
-            ResultSet resultSet = statement.executeQuery(query);
+        SessionFactory sf = con.buildSessionFactory();
 
-            while (resultSet.next()) {
-                int course_id = resultSet.getInt("course_id");
-                String course_name = resultSet.getString("course_name");
-               // Integer department_id_fk = resultSet.getInt("department_id_fk");
+        Session session = sf.openSession();
 
-                Course c = new Course(course_id, course_name,-1);
+        session.beginTransaction();
 
-                courses.add(c);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Criteria criteria= session.createCriteria(Course.class);
+        List courses = criteria.list();
+        session.getTransaction().commit();
         return courses;
     }
 }

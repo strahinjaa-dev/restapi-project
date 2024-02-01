@@ -1,39 +1,79 @@
 package org.example.models;
 
-public class Enrollment {
+import javax.persistence.*;
+import java.io.Serializable;
 
-    private Integer student_id;
-    private Integer course_id;
+@Entity
+public class Enrollment implements Serializable {
 
+        @Embeddable
+        public static class EnrollmentId implements Serializable {
+            @Column(name = "student_id")
+            private int studentId;
+
+            @Column(name = "course_id")
+            private int courseId;
+
+            public int getStudentId() {
+                return studentId;
+            }
+
+            public int getCourseId() {
+                return courseId;
+            }
+
+            public void setStudentId(int studentId) {
+                this.studentId = studentId;
+            }
+
+            public void setCourseId(int courseId) {
+                this.courseId = courseId;
+            }
+        }
+
+        @EmbeddedId
+        private EnrollmentId enrollment_id;
+
+        @MapsId("studentId")
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "student_id", nullable = false, insertable = false, updatable = false)
+        private Student student;
+
+        @MapsId("courseId")
+        @ManyToOne(fetch = FetchType.EAGER)
+        @JoinColumn(name = "course_id", nullable = false, insertable = false, updatable = false)
+        private Course course;
+
+    public EnrollmentId getEnrollment_id() {
+        return enrollment_id;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setEnrollment_id(EnrollmentId enrollment_id) {
+        this.enrollment_id = enrollment_id;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Enrollment(EnrollmentId id, Student student, Course course) {
+        this.enrollment_id = id;
+        this.student = student;
+        this.course = course;
+    }
     public Enrollment(){}
-
-    public Enrollment(Integer student_id, Integer course_id) {
-        this.student_id = student_id;
-        this.course_id = course_id;
-    }
-
-    public Integer getStudent_id() {
-        return student_id;
-    }
-
-    public Integer getCourse_id() {
-        return course_id;
-    }
-
-    public void setStudent_id(Integer student_id) {
-        this.student_id = student_id;
-    }
-
-    public void setCourse_id(Integer course_id) {
-        this.course_id = course_id;
-    }
-
-    @Override
-    public String toString() {
-        return "Enrollment{" +
-                "student_id=" + student_id +
-                ", course_id=" + course_id +
-                '}';
-    }
 }
+
 

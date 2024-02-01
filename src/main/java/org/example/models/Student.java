@@ -1,31 +1,37 @@
 package org.example.models;
 
+import org.example.models.Instructor;
+import javax.persistence.*;
 import javax.xml.*;
 
-
+@Entity
 public class Student {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer student_id;
     private String first_name;
     private String last_name;
 
-    private Integer instructor_id;
+    @OneToOne(cascade = CascadeType.REMOVE)
+    private Instructor instructor;
 
     public Student(){}
 
-    public Student(Integer student_id, String first_name, String last_name, Integer instructor_id) {
+
+    public Student(Integer student_id, String first_name, String last_name, Instructor instructor) {
         this.student_id = student_id;
         this.first_name = first_name;
         this.last_name = last_name;
-        this.instructor_id = instructor_id;
+        this.instructor = instructor;
     }
 
-    public void setInstructor_id(Integer instructor_id) {
-        this.instructor_id = instructor_id;
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
     }
 
-    public Integer getInstructor_id() {
-        return instructor_id;
+    public Instructor getInstructor() {
+        return instructor;
     }
 
     public Integer getStudent_id() {

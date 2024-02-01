@@ -1,7 +1,13 @@
 package org.example.repositories;
 
 import org.example.jdbc.DatabaseConnection;
+import org.example.models.Course;
 import org.example.models.Department;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,102 +19,66 @@ public class DepartmentRepository {
 
     public void deleteDepartment(Department department) throws SQLException {
 
-        int id= department.getDepartment_id();
-        try {
-            Statement statement = connection.createStatement();
+        Configuration con= new Configuration().configure().addAnnotatedClass(Department.class);
 
-            String sqlQuery = "DELETE FROM departments WHERE department_id = " + id;
+        SessionFactory sf = con.buildSessionFactory();
 
-            statement.executeUpdate(sqlQuery);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Session session = sf.openSession();
+
+        session.beginTransaction();
+
+        session.delete(department);
+
+        session.getTransaction().commit();
+
     }
 
     public Department updateDepartment(Department department) {
+        Configuration con= new Configuration().configure().addAnnotatedClass(Department.class);
 
-        try {
-            Statement statement = connection.createStatement();
+        SessionFactory sf = con.buildSessionFactory();
 
-            Integer id = department.getDepartment_id();
-            String name = department.getDepartment_name();
+        Session session = sf.openSession();
 
+        session.beginTransaction();
 
-            String sqlQuery = "UPDATE departments SET department_name = ? WHERE department_id = " + id;
+        session.update(department);
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery)) {
+        session.getTransaction().commit();
 
-                preparedStatement.setString(1, name);
-
-
-                int affectedRows = preparedStatement.executeUpdate();
-                System.out.println("Broj ažuriranih redova: " + affectedRows);
-            }
-
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
         return department;
     }
 
     public Department addDepartment(Department department) {
 
-        try {
+        Configuration con= new Configuration().configure().addAnnotatedClass(Department.class);
 
-            String insertQuery = "INSERT INTO departments ( department_name ) VALUES ( ? )";
+        SessionFactory sf = con.buildSessionFactory();
+        Session session = sf.openSession();
 
-            String name = department.getDepartment_name();
+        Transaction tx = session.beginTransaction();
 
+        session.save(department);
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-                preparedStatement.setString(1, name);
+        tx.commit();
 
-
-                int affectedRows = preparedStatement.executeUpdate();
-
-                if (affectedRows > 0) {
-                    System.out.println("Podaci uspesno uneseni u bazu.");
-                } else {
-                    System.out.println("Nije uspelo uneti podatke u bazu.");
-                }
-            }
-
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
         return department;
     }
 
     public List<Department> getDepartments() throws SQLException {
 
-        List<Department> departments = new ArrayList<>();
+        Configuration con= new Configuration().configure().addAnnotatedClass(Department.class);
 
-        try {
-            Statement statement = connection.createStatement();
+        SessionFactory sf = con.buildSessionFactory();
 
-            String query = "select * from departments";
-            ResultSet resultSet = statement.executeQuery(query);
+        Session session = sf.openSession();
 
-            while (resultSet.next()) {
-                int department_id = resultSet.getInt("department_id");
-                String department_name = resultSet.getString("department_name");
+        session.beginTransaction();
 
-                Department d = new Department(department_id, department_name);
+        Criteria criteria= session.createCriteria(Department.class);
+        List departments = criteria.list();
+        session.getTransaction().commit();
 
-                departments.add(d);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return departments;
     }
 }
