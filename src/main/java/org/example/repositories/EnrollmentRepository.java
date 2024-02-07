@@ -1,10 +1,9 @@
 package org.example.repositories;
 
 import org.example.jdbc.DatabaseConnection;
-import org.example.models.Course;
-import org.example.models.Department;
+
 import org.example.models.Enrollment;
-import org.example.models.Student;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,57 +11,106 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import java.sql.*;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class EnrollmentRepository {
 
     Connection connection = DatabaseConnection.getConnection();
 
-    public List<Enrollment> getEnrollments() throws SQLException {
+    public List<Enrollment> getEnrollments(){
 
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Enrollment.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Enrollment.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
+        List<Enrollment> enrollments = null;
 
-        session.beginTransaction();
+        try {
 
-        Criteria criteria= session.createCriteria(Enrollment.class);
-        List enrollments = criteria.list();
-        session.getTransaction().commit();
+            transaction = session.beginTransaction();
 
+            Criteria criteria= session.createCriteria(Enrollment.class);
+            enrollments = criteria.list();
+
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return enrollments;
     }
     public Enrollment addEnrollment(Enrollment enrollment){
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Enrollment.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Enrollment.class);
         SessionFactory sf = con.buildSessionFactory();
+
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        Transaction tx = session.beginTransaction();
+        try {
 
-        session.save(enrollment);
+            transaction = session.beginTransaction();
 
-        tx.commit();
+            session.save(enrollment);
 
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return enrollment;
     }
-    public void deleteEnrollment(Enrollment enrollment) throws SQLException {
+    public void deleteEnrollment(Enrollment enrollment)  {
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Enrollment.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Enrollment.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        session.beginTransaction();
+        try {
 
-        session.delete(enrollment);
+            transaction = session.beginTransaction();
 
-        session.getTransaction().commit();
+            session.delete(enrollment);
+
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 }

@@ -22,13 +22,8 @@ public class StudentController {
     StudentService studentService= new StudentService();
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Student> getMessageStudents() throws SQLException {
-        try {
-            return studentService.getStudents();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+    public List<Student> getMessageStudents()  {
+
         return studentService.getStudents();
     }
     @POST

@@ -1,7 +1,7 @@
 package org.example.repositories;
 
 import org.example.jdbc.DatabaseConnection;
-import org.example.models.Instructor;
+
 import org.example.models.Student;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
@@ -18,68 +18,127 @@ public class StudentRepository {
 
     public Student addStudent(Student student){
 
-        Student s= new Student();
-
-        Configuration con= new Configuration().configure().addAnnotatedClass(Student.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Student.class);
         SessionFactory sf = con.buildSessionFactory();
+
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        Transaction tx = session.beginTransaction();
+        try {
 
-        session.save(student);
+            transaction = session.beginTransaction();
 
-        tx.commit();
+            session.save(student);
 
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return student;
     }
 
-    public List<Student> getAllStudents() throws SQLException{
+    public List<Student> getAllStudents() {
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Student.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Student.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
+        List<Student> students = null;
 
-        session.beginTransaction();
+        try {
 
-        Criteria criteria= session.createCriteria(Student.class);
-        List students = criteria.list();
-        session.getTransaction().commit();
+            transaction = session.beginTransaction();
 
+            Criteria criteria= session.createCriteria(Student.class);
+            students = criteria.list();
+
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return students;
     }
-    public void deleteStudentByID(Student student) throws SQLException {
-        int id = student.getStudent_id();
-
-        Configuration con= new Configuration().configure().addAnnotatedClass(Student.class);
-
+    public void deleteStudentByID(Student student)  {
+        Configuration con = new Configuration().configure().addAnnotatedClass(Student.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        session.beginTransaction();
+        try {
 
-        session.delete(student);
+            transaction = session.beginTransaction();
 
-        session.getTransaction().commit();
+            session.delete(student);
 
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
     }
     public Student updateStudent(Student student){
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Student.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Student.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        session.beginTransaction();
+        try {
 
-        session.update(student);
+            transaction = session.beginTransaction();
 
-        session.getTransaction().commit();
+            session.update(student);
 
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return student;
     }
 }

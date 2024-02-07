@@ -12,7 +12,7 @@ public class CourseService {
 
     CourseRepository courseRepository= new CourseRepository();
 
-    public void deleteCourse(Course course) throws SQLException {
+    public void deleteCourse(Course course) {
 
         courseRepository.deleteCourse(course);
     }
@@ -27,7 +27,7 @@ public class CourseService {
       return courseRepository.addCourse(course);
     }
 
-    public List<Course> getCourses() throws SQLException {
+    public List<Course> getCourses() {
 
         return courseRepository.getCourses();
     }

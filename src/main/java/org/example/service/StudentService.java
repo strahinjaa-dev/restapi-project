@@ -13,18 +13,13 @@ import static java.sql.DriverManager.getConnection;
 
 public class StudentService {
 
-
     StudentRepository studentRepository= new StudentRepository();
     Connection connection = DatabaseConnection.getConnection();
 
 
     public void deleteStudent(Student student) {
 
-        try {
              studentRepository.deleteStudentByID(student);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public Student updateStudent(Student student){
@@ -36,7 +31,7 @@ public class StudentService {
 
        return studentRepository.addStudent(student);
     }
-    public List<Student> getStudents() throws SQLException{
+    public List<Student> getStudents() {
 
        return studentRepository.getAllStudents();
     }

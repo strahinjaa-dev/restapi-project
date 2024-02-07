@@ -49,11 +49,6 @@ public class DepartmentController {
     @Produces(MediaType.APPLICATION_JSON)
     public void deleteDepartment( Department department){
 
-
-        try {
             departmentService.deleteDepartment(department);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

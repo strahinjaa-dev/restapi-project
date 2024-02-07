@@ -17,68 +17,133 @@ public class DepartmentRepository {
 
     Connection connection = DatabaseConnection.getConnection();
 
-    public void deleteDepartment(Department department) throws SQLException {
+    public void deleteDepartment(Department department) {
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Department.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Department.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        session.beginTransaction();
+        try {
 
-        session.delete(department);
+            transaction = session.beginTransaction();
 
-        session.getTransaction().commit();
+            session.delete(department);
+
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
 
     }
 
     public Department updateDepartment(Department department) {
-        Configuration con= new Configuration().configure().addAnnotatedClass(Department.class);
 
+        Configuration con = new Configuration().configure().addAnnotatedClass(Department.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        session.beginTransaction();
+        try {
 
-        session.update(department);
+            transaction = session.beginTransaction();
 
-        session.getTransaction().commit();
+            session.update(department);
 
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return department;
     }
 
     public Department addDepartment(Department department) {
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Department.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Department.class);
         SessionFactory sf = con.buildSessionFactory();
+
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        Transaction tx = session.beginTransaction();
+        try {
 
-        session.save(department);
+            transaction = session.beginTransaction();
 
-        tx.commit();
+            session.save(department);
 
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return department;
     }
 
-    public List<Department> getDepartments() throws SQLException {
+    public List<Department> getDepartments() {
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Department.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Department.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
+        List<Department> departments = null;
 
-        session.beginTransaction();
+        try {
 
-        Criteria criteria= session.createCriteria(Department.class);
-        List departments = criteria.list();
-        session.getTransaction().commit();
+            transaction = session.beginTransaction();
 
+            Criteria criteria= session.createCriteria(Department.class);
+            departments = criteria.list();
+
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return departments;
     }
 }

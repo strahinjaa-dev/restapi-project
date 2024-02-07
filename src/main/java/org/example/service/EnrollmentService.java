@@ -12,7 +12,7 @@ import java.util.List;
 public class EnrollmentService {
 
     EnrollmentRepository enrollmentRepository= new EnrollmentRepository();
-    public List<Enrollment> getEnrollments() throws SQLException {
+    public List<Enrollment> getEnrollments() {
 
         return enrollmentRepository.getEnrollments();
     }
@@ -22,7 +22,7 @@ public class EnrollmentService {
 
         return enrollment;
     }
-    public void deleteEnrollment(Enrollment enrollment) throws SQLException {
+    public void deleteEnrollment(Enrollment enrollment)  {
 
         enrollmentRepository.deleteEnrollment(enrollment);
     }

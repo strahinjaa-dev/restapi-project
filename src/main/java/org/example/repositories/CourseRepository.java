@@ -18,68 +18,135 @@ public class CourseRepository {
 
     Connection connection = DatabaseConnection.getConnection();
 
-    public void deleteCourse(Course course) throws SQLException {
+    public void deleteCourse(Course course) {
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Course.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Course.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        session.beginTransaction();
+        try {
 
-        session.delete(course);
+            transaction = session.beginTransaction();
 
-        session.getTransaction().commit();
+            session.delete(course);
+
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
+
     }
 
     public Course updateCourse(Course course) {
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Course.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Course.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        session.beginTransaction();
+        try {
 
-        session.update(course);
+            transaction = session.beginTransaction();
 
-        session.getTransaction().commit();
+            session.update(course);
 
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return course;
     }
 
     public Course addCourse(Course course) {
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Course.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Course.class);
         SessionFactory sf = con.buildSessionFactory();
+
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        Transaction tx = session.beginTransaction();
+        try {
 
-        session.save(course);
+            transaction = session.beginTransaction();
 
-        tx.commit();
+            session.save(course);
 
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return course;
     }
 
-    public List<Course> getCourses() throws SQLException {
+    public List<Course> getCourses()  {
+
+            Configuration con = new Configuration().configure().addAnnotatedClass(Course.class);
+            SessionFactory sf = con.buildSessionFactory();
 
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Course.class);
+            Session session = sf.openSession();
+            Transaction transaction = null;
+            List<Course> courses = null;
 
-        SessionFactory sf = con.buildSessionFactory();
+            try {
 
-        Session session = sf.openSession();
+                transaction = session.beginTransaction();
 
-        session.beginTransaction();
+                Criteria criteria= session.createCriteria(Course.class);
+                 courses = criteria.list();
 
-        Criteria criteria= session.createCriteria(Course.class);
-        List courses = criteria.list();
-        session.getTransaction().commit();
+                transaction.commit();
+
+
+
+            } catch (Exception e) {
+
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                e.printStackTrace();
+            } finally {
+
+                if (session != null) {
+                    session.close();
+                }
+            }
         return courses;
     }
 }

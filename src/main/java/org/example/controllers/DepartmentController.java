@@ -13,17 +13,9 @@ public class DepartmentController {
     DepartmentService departmentService= new DepartmentService();
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Department> getMessageDepartments() throws SQLException {
+    public List<Department> getMessageDepartments() {
 
-
-        try {
             return departmentService.getDepartments();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return departmentService.getDepartments();
     }
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -43,11 +35,7 @@ public class DepartmentController {
     @Produces(MediaType.APPLICATION_JSON)
     public void deleteDepartment( Department department){
 
+        departmentService.deleteDepartment(department);
 
-        try {
-            departmentService.deleteDepartment(department);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

@@ -24,30 +24,15 @@ public class EnrollmentController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Enrollment> getEnrollments() {
-        try {
+
             return enrollmentService.getEnrollments();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            return enrollmentService.getEnrollments();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     public void deleteEnrollment(Enrollment enrollment){
 
-
-        try {
             enrollmentService.deleteEnrollment(enrollment);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
-    //add enrollment
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Enrollment addEnrollment(Enrollment enrollment) {

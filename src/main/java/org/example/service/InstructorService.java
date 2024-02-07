@@ -14,7 +14,7 @@ public class InstructorService {
 
     InstructorRepository instructorRepository= new InstructorRepository();
 
-    public void deleteInstructor(Instructor instructor) throws SQLException {
+    public void deleteInstructor(Instructor instructor)  {
 
         instructorRepository.deleteInstructor(instructor);
     }
@@ -29,7 +29,7 @@ public class InstructorService {
        return instructorRepository.addInstructor(instructor);
     }
 
-    public List<Instructor> getInstructors() throws SQLException {
+    public List<Instructor> getInstructors()  {
 
        return instructorRepository.getInstructors();
     }

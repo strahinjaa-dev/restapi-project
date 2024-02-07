@@ -22,13 +22,8 @@ public class InstructorController {
 
 @GET
 @Produces(MediaType.APPLICATION_JSON)
-public List<Instructor> getMessageInstructors() throws SQLException {
-    try {
-        return instructorService.getInstructors();
-    }
-    catch (Exception e) {
-        e.printStackTrace();
-    }
+public List<Instructor> getMessageInstructors() {
+
     return instructorService.getInstructors();
 }
 
@@ -52,12 +47,7 @@ public List<Instructor> getMessageInstructors() throws SQLException {
     @Produces(MediaType.APPLICATION_JSON)
     public void deleteInstructor(Instructor instructor){
 
-
-        try {
             instructorService.deleteInstructor(instructor);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }

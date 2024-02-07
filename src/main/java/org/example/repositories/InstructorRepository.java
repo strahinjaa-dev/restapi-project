@@ -2,7 +2,6 @@ package org.example.repositories;
 
 import org.example.jdbc.DatabaseConnection;
 import org.example.models.Instructor;
-import org.example.models.Student;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,68 +15,132 @@ import java.util.List;
 public class InstructorRepository {
 
     Connection connection = DatabaseConnection.getConnection();
-    public void deleteInstructor(Instructor instructor) throws SQLException {
+    public void deleteInstructor(Instructor instructor) {
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Instructor.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Instructor.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        session.beginTransaction();
+        try {
 
-        session.delete(instructor);
+            transaction = session.beginTransaction();
 
-        session.getTransaction().commit();
+            session.delete(instructor);
+
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 
     public Instructor updateInstructor(Instructor instructor) {
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Instructor.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Instructor.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        session.beginTransaction();
+        try {
 
-        session.update(instructor);
+            transaction = session.beginTransaction();
 
-        session.getTransaction().commit();
+            session.update(instructor);
 
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return instructor;
     }
 
     public Instructor addInstructor(Instructor instructor) {
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Instructor.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Instructor.class);
         SessionFactory sf = con.buildSessionFactory();
+
+
         Session session = sf.openSession();
+        Transaction transaction = null;
 
-        Transaction tx = session.beginTransaction();
+        try {
 
-        session.save(instructor);
+            transaction = session.beginTransaction();
 
-        tx.commit();
+            session.save(instructor);
 
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return instructor;
     }
 
-    public List<Instructor> getInstructors() throws SQLException {
+    public List<Instructor> getInstructors() {
 
-        Configuration con= new Configuration().configure().addAnnotatedClass(Instructor.class);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(Instructor.class);
         SessionFactory sf = con.buildSessionFactory();
 
+
         Session session = sf.openSession();
+        Transaction transaction = null;
+        List<Instructor> instructors = null;
 
-        session.beginTransaction();
+        try {
 
-        Criteria criteria= session.createCriteria(Instructor.class);
-        List instructors = criteria.list();
-        session.getTransaction().commit();
+            transaction = session.beginTransaction();
 
+            Criteria criteria= session.createCriteria(Instructor.class);
+            instructors = criteria.list();
+
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+
+            if (session != null) {
+                session.close();
+            }
+        }
         return instructors;
     }
 }

@@ -12,7 +12,7 @@ public class DepartmentService {
 
     DepartmentRepository departmentRepository= new DepartmentRepository();
 
-    public void deleteDepartment(Department department) throws SQLException {
+    public void deleteDepartment(Department department) {
 
         departmentRepository.deleteDepartment(department);
     }
@@ -27,7 +27,7 @@ public class DepartmentService {
            return departmentRepository.addDepartment(department);
     }
 
-    public List<Department> getDepartments() throws SQLException {
+    public List<Department> getDepartments() {
 
         return departmentRepository.getDepartments();
     }
