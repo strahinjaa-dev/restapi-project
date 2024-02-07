@@ -20,7 +20,6 @@ public class InstructorRepository {
         Configuration con = new Configuration().configure().addAnnotatedClass(Instructor.class);
         SessionFactory sf = con.buildSessionFactory();
 
-
         Session session = sf.openSession();
         Transaction transaction = null;
 
@@ -50,7 +49,6 @@ public class InstructorRepository {
 
         Configuration con = new Configuration().configure().addAnnotatedClass(Instructor.class);
         SessionFactory sf = con.buildSessionFactory();
-
 
         Session session = sf.openSession();
         Transaction transaction = null;
@@ -83,7 +81,6 @@ public class InstructorRepository {
         Configuration con = new Configuration().configure().addAnnotatedClass(Instructor.class);
         SessionFactory sf = con.buildSessionFactory();
 
-
         Session session = sf.openSession();
         Transaction transaction = null;
 
@@ -114,7 +111,6 @@ public class InstructorRepository {
 
         Configuration con = new Configuration().configure().addAnnotatedClass(Instructor.class);
         SessionFactory sf = con.buildSessionFactory();
-
 
         Session session = sf.openSession();
         Transaction transaction = null;

@@ -24,7 +24,6 @@ public class EnrollmentController {
 
             enrollmentService.deleteEnrollment(enrollment);
     }
-    //add enrollment
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Enrollment addEnrollment(Enrollment enrollment) {

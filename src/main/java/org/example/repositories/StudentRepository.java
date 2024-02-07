@@ -21,7 +21,6 @@ public class StudentRepository {
         Configuration con = new Configuration().configure().addAnnotatedClass(Student.class);
         SessionFactory sf = con.buildSessionFactory();
 
-
         Session session = sf.openSession();
         Transaction transaction = null;
 
@@ -52,7 +51,6 @@ public class StudentRepository {
 
         Configuration con = new Configuration().configure().addAnnotatedClass(Student.class);
         SessionFactory sf = con.buildSessionFactory();
-
 
         Session session = sf.openSession();
         Transaction transaction = null;
@@ -85,7 +83,6 @@ public class StudentRepository {
         Configuration con = new Configuration().configure().addAnnotatedClass(Student.class);
         SessionFactory sf = con.buildSessionFactory();
 
-
         Session session = sf.openSession();
         Transaction transaction = null;
 
@@ -114,7 +111,6 @@ public class StudentRepository {
 
         Configuration con = new Configuration().configure().addAnnotatedClass(Student.class);
         SessionFactory sf = con.buildSessionFactory();
-
 
         Session session = sf.openSession();
         Transaction transaction = null;

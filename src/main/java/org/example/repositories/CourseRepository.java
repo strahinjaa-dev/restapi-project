@@ -133,8 +133,6 @@ public class CourseRepository {
 
                 transaction.commit();
 
-
-
             } catch (Exception e) {
 
                 if (transaction != null) {

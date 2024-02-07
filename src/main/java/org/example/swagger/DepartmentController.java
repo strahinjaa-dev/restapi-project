@@ -21,14 +21,6 @@ public class DepartmentController {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Department> getMessageDepartments() throws SQLException {
 
-
-        try {
-            return departmentService.getDepartments();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
         return departmentService.getDepartments();
     }
     @POST

@@ -22,7 +22,6 @@ public class DepartmentRepository {
         Configuration con = new Configuration().configure().addAnnotatedClass(Department.class);
         SessionFactory sf = con.buildSessionFactory();
 
-
         Session session = sf.openSession();
         Transaction transaction = null;
 
@@ -86,7 +85,6 @@ public class DepartmentRepository {
         Configuration con = new Configuration().configure().addAnnotatedClass(Department.class);
         SessionFactory sf = con.buildSessionFactory();
 
-
         Session session = sf.openSession();
         Transaction transaction = null;
 
@@ -117,7 +115,6 @@ public class DepartmentRepository {
 
         Configuration con = new Configuration().configure().addAnnotatedClass(Department.class);
         SessionFactory sf = con.buildSessionFactory();
-
 
         Session session = sf.openSession();
         Transaction transaction = null;

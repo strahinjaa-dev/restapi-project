@@ -37,7 +37,6 @@ public class CourseController {
     public Course updateCourse( Course course){
 
         return courseService.updateCourse(course);
-
     }
 
     @DELETE

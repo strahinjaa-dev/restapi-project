@@ -20,10 +20,8 @@ public class EnrollmentRepository {
 
     public List<Enrollment> getEnrollments(){
 
-
         Configuration con = new Configuration().configure().addAnnotatedClass(Enrollment.class);
         SessionFactory sf = con.buildSessionFactory();
-
 
         Session session = sf.openSession();
         Transaction transaction = null;
@@ -57,7 +55,6 @@ public class EnrollmentRepository {
         Configuration con = new Configuration().configure().addAnnotatedClass(Enrollment.class);
         SessionFactory sf = con.buildSessionFactory();
 
-
         Session session = sf.openSession();
         Transaction transaction = null;
 
@@ -87,7 +84,6 @@ public class EnrollmentRepository {
 
         Configuration con = new Configuration().configure().addAnnotatedClass(Enrollment.class);
         SessionFactory sf = con.buildSessionFactory();
-
 
         Session session = sf.openSession();
         Transaction transaction = null;
